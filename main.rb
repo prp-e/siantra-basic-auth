@@ -58,6 +58,14 @@ get '/logout' do
  redirect to("/")
 end
 
+get '/signup' do
+ erb :signup
+end
+
+get '/signup_error' do
+ erb :signup_notmatch
+end
+
 get '/users' do 
  @users = User.all
  if session[:username].nil?
@@ -65,4 +73,18 @@ get '/users' do
  else
   erb :users
  end
+end
+
+post '/welcome' do
+ begin 
+  params[:user][:password] == params[:user][:password_again]
+  user = User.create(:username => params[:user][:username], :password => params[:user][:password])
+  redirect to("/welcome")
+ rescue
+  redirect to("/signup_error")
+ end
+end
+
+get '/welcome' do
+ erb :welcome
 end
